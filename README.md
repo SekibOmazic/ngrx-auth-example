@@ -10,7 +10,7 @@ This is a simple application showing how to use ngrx and OAuth. Pretty much work
 git clone git@github.com:SekibOmazic/ngrx-auth-example.git
 
 # change directory to our repo
-cd angular2-store-example
+cd ngrx-auth-example
 
 # install the repo with npm
 npm install
