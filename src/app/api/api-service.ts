@@ -31,9 +31,9 @@ export class ApiService {
     });
   }
 
-  loadUsers(): Observable<User[]> {
+  loadUsers(token: string): Observable<User[]> {
     return this.request({
-      //token: this.token,
+      token: token,
       method: RequestMethod.Get,
       url: API_USERS_URL
     });

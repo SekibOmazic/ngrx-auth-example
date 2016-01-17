@@ -17,6 +17,7 @@ import {
 } from '../reducers/users';
 
 import { User, Users } from './models';
+import {Auth} from "./models";
 
 @Injectable()
 export class UserService {
@@ -29,6 +30,8 @@ export class UserService {
   constructor(private _store: Store<any>, api: ApiService) {
     const store$ = this._store.select<Users>('users');
 
+    const token$ = this._store.select<Auth>('auth').map(data => data['token']);
+
     this.adding$ = store$.map(data => data['adding']);
     this.loading$ = store$.map(data => data['loading']);
     this.users$ = store$.map(data => data['users']);
@@ -37,7 +40,7 @@ export class UserService {
       .filter(action => action.type === LOAD_USERS)
       .do(() => _store.dispatch({type: LOADING_USERS}))
       .mergeMap(
-        action => api.loadUsers(),
+        action => api.loadUsers('DUMMY'), // <--- NEED TOKEN HERE
         (action, payload: User[]) => ({type: LOADED_USERS, payload})
       );
 
