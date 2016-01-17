@@ -1,0 +1,6 @@
+{
+  "token": {
+    "expires": 10080,
+    "secret": "Use ngrx and be happy"
+  }
+}

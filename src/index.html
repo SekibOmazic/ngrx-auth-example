@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+
+  <title>{%= o.webpackConfig.metadata.title %}</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{%= o.webpackConfig.metadata.title %}">
+
+  <!-- use http://www.favicon-generator.org/ to replace files in public/icon-->
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icon/favicon-16x16.png">
+  <link rel="manifest" href="/assets/manifest.json">
+  <meta name="msapplication-TileColor" content="#00bcd4">
+  <meta name="msapplication-TileImage" content="/assets/icon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#00bcd4">
+  <!-- end favicon -->
+
+  <!-- base url -->
+  <base href="{%= o.webpackConfig.metadata.baseUrl %}">
+
+  <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="assets/css/material.min.css">
+  <script src="assets/js/material.min.js"></script>
+
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      height: 100%;
+      background-color: #0571bf;
+    }
+
+    menu {
+      box-sizing: border-box;
+      position: relative;
+
+      color: white;
+      height: 44px;
+      width: 100%;
+      padding: 6px;
+      margin: 0px;
+      flex-shrink: 0;
+
+      /*background: #3F51B5;*/
+      background: rgba(0, 0, 0, 0.15) none repeat scroll 0% 0%;
+    }
+
+    .middle{
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      top: 50%;
+    }
+    .right{
+      right: 0;
+      transform: translate(0, -50%);
+      position: absolute;
+      top: 50%;
+      padding-right: 10px;
+      cursor: pointer;
+    }
+
+    .content {
+      padding-top: 20px;
+      padding-left: 20px;
+    }
+    .spacer {
+      margin-top: 20px;
+    }
+
+    .vertical {
+      display: flex;
+      flex-direction: column;
+    }
+    .signup {
+      display: flex;
+      align-items: center;
+      /* justify-content: center; */
+      flex-direction: column;
+      height: 100%;
+      background: white;
+    }
+
+    show-error span {
+      color: #de3226;
+      position: absolute;
+      font-size: 12px;
+      margin-top: 3px;
+      display: block;
+    }
+
+    .quiet-button {
+      color: #8c8c8c;
+      -webkit-user-select: none;
+      user-select: none;
+      margin: 2px 0;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .signup h1 {
+      font-size: 1.777em;
+      line-height: 1.2em;
+      margin: .67em 0;
+      font-weight: bold;
+    }
+  </style>
+
+  {% for (var css in o.htmlWebpackPlugin.files.css) { %}
+  <link href="{%=o.htmlWebpackPlugin.files.css[css] %}" rel="stylesheet">
+  {% } %}
+</head>
+<body>
+
+  <app>
+    Loading...
+  </app>
+
+  {% if (o.webpackConfig.metadata.ENV === 'development') { %}
+  <!-- Webpack Dev Server reload -->
+  <script src="http://{%= o.webpackConfig.metadata.host %}:{%= o.webpackConfig.metadata.port %}/webpack-dev-server.js"></script>
+  {% } %}
+
+  <!-- Webpack HtmlWebpackPlugin manually inject scripts -->
+  {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
+  <script src="{%= o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
+  {% } %}
+
+</body>
+</html>
