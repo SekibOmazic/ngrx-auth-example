@@ -23,6 +23,6 @@ go to [http://0.0.0.0:3000](http://0.0.0.0:3000) in your browser
 
 ## Issues
 
-- Figure how to pass the jwt token into ApiService (`/ngrx/users` not protected yet)
 - Changing URL in browser breaks the application
+- Add a form for managing user profile
 

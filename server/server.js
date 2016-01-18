@@ -39,7 +39,7 @@ server.use(jwt({
   return (
     url === '/signup' ||
     url === '/login'
-    || (usersRE).test(url)
+    // || (usersRE).test(url)
   );
 }));
 

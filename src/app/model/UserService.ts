@@ -40,7 +40,7 @@ export class UserService {
       .filter(action => action.type === LOAD_USERS)
       .do(() => _store.dispatch({type: LOADING_USERS}))
       .mergeMap(
-        action => api.loadUsers('DUMMY'), // <--- NEED TOKEN HERE
+        action => api.loadUsers(),
         (action, payload: User[]) => ({type: LOADED_USERS, payload})
       );
 
