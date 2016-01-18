@@ -18,7 +18,7 @@ import { UserList } from './UserList';
   `
 })
 export class UserListContainer {
-  constructor(private userService: UserService, private auth: AuthService) {
+  constructor(private userService: UserService) {
     this.userService.loadUsers();
   }
 }

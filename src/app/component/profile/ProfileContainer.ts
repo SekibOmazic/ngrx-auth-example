@@ -20,8 +20,6 @@ import { AuthService } from '../../model/AuthService';
 })
 export class ProfileContainer {
 
-  constructor(private userService: UserService, private auth: AuthService) {
-    console.log('ProfileContainer init ...');
-  }
+  constructor(private userService: UserService, private auth: AuthService) {}
 
 }
