@@ -21,8 +21,7 @@ npm start
 go to [http://0.0.0.0:3000](http://0.0.0.0:3000) in your browser
 
 
-## Issues
+## TODO
 
-- Changing URL in browser breaks the application
 - Add a form for managing user profile
 

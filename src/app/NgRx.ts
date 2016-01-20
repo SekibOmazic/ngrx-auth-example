@@ -13,13 +13,15 @@ import { shouldActivate } from './helpers/helpers';
 import { UserListContainer } from './component/users/UserListContainer';
 import { ProfileContainer } from './component/profile/ProfileContainer';
 import { AuthService } from './model/AuthService';
+import { User } from './model/models';
+import {Subscription} from 'rxjs/Subscription';
 
 declare var componentHandler: any;
 
 
 @Component({
   selector: 'ngrx',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush, //not using Observable any more
   directives: [ ROUTER_DIRECTIVES ],
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -37,11 +39,13 @@ declare var componentHandler: any;
         <li class="mdl-menu__item" [routerLink]="['./Profile']">Profile</li>
       </ul>
 
-      <div class="middle" *ngIf="auth.current$ | async">
-        <span>Welcome {{(auth.current$ | async).name}}</span>
+      <!-- Using *ngIf="auth.current$ | async" breaks the app -->
+      <div class="middle" *ngIf="current">
+        <span>Welcome {{ current.name }}</span>
       </div>
 
-      <div class="right" *ngIf="auth.current$ | async">
+      <!-- Using *ngIf="auth.current$ | async" breaks the app -->
+      <div class="right" *ngIf="current">
         <span (click)="auth.logout()">Logout</span>
       </div>
     </menu>
@@ -59,23 +63,35 @@ declare var componentHandler: any;
 })
 
 export class NgRx implements OnInit {
-  private subscription: any;
+  private tokenSub: Subscription<string;
+
+  private current: User;
+  private currentSub: Subscription<User>;
 
   constructor(private auth: AuthService, private router: Router) {
-    this.subscription = this.auth.token$.subscribe(
+    this.tokenSub = this.auth.token$.subscribe(
       (token) => {
         if (!token) {
           this.router.navigate(['/Login']);
         }
       }
     );
+
+    /*
+     * previously used on Observable but it broke browser's
+     * back/forward button. Not sure why.
+     */
+    this.currentSub = this.auth.current$.subscribe(c => this.current = c);
   }
 
   ngOnInit() {
+    // needed to fix Material Design Lite
     componentHandler.upgradeAllRegistered();
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    // don't forget to clean up the subscriptions
+    this.tokenSub.unsubscribe();
+    this.currentSub.unsubscribe();
   }
 }
