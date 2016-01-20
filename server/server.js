@@ -5,13 +5,21 @@ var jwtToken = require('jsonwebtoken');
 var config = require('./config');
 
 
-
+/*
 function generateToken(email, password) {
   var payload = { email: email, password:password };
   return jwtToken.sign(payload, config.token.secret, {
     expiresIn: config.token.expires
   });
 }
+*/
+function generateToken(id) {
+  var payload = { id: id };
+  return jwtToken.sign(payload, config.token.secret, {
+    expiresIn: config.token.expires
+  });
+}
+
 
 function extractToken(header) {
   return header.split(' ')[1];
@@ -50,7 +58,7 @@ server.post('/login', function (req, res) {
   const user = db('users').find({ email: email });
 
   if (user !== undefined && user.password === password) {
-    const token = generateToken(email, password);
+    const token = generateToken(user.id);
     res.send({token: token, user: {id: user.id, name: user.name, email: user.email}, error: null});
   } else {
     res.send({token: null, user: null, error: 'No such user'});
@@ -67,7 +75,7 @@ server.post('/signup', function (req, res) {
 
     // Returns a Promise that resolves to an user
     userId = db('users').insert(req.body).id;
-    const token = generateToken(req.body.email, req.body.password);
+    const token = generateToken(userId);
     res.send({token: token, user: {id: userId, name: req.body.name, email: req.body.email}, error: null});
   } else {
     res.send({token: null, user: null, error: 'Email already taken'});

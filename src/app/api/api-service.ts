@@ -59,6 +59,8 @@ export class ApiService {
 
   oAuthRequest(options): Observable<any> {
 
+    console.log('Calling protected URL ...');
+
     return this.token$.flatMap(token => {
       options.headers = new Headers();
       options.headers.append('Content-Type', 'Bearer ' + 'application/json');
