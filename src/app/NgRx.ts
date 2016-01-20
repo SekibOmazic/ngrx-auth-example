@@ -8,13 +8,15 @@ import {
 
 import { Router, RouteConfig, ROUTER_DIRECTIVES, CanActivate } from 'angular2/router';
 
+import { Subscription } from 'rxjs/Subscription';
+
 import { shouldActivate } from './helpers/helpers';
 
 import { UserListContainer } from './component/users/UserListContainer';
 import { ProfileContainer } from './component/profile/ProfileContainer';
 import { AuthService } from './model/AuthService';
 import { User } from './model/models';
-import {Subscription} from 'rxjs/Subscription';
+
 
 declare var componentHandler: any;
 
@@ -63,7 +65,7 @@ declare var componentHandler: any;
 })
 
 export class NgRx implements OnInit {
-  private tokenSub: Subscription<string;
+  private tokenSub: Subscription<string>;
 
   private current: User;
   private currentSub: Subscription<User>;
