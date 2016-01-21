@@ -1,6 +1,9 @@
 import {Component, Host, OnInit, ChangeDetectionStrategy} from 'angular2/core';
 import {Router, CanActivate} from 'angular2/router';
 import {ControlGroup, Validators, FormBuilder} from 'angular2/common';
+
+import { Subscription } from 'rxjs/Subscription';
+
 import { shouldActivate } from '../../helpers/helpers';
 
 import {AuthService} from '../../model/AuthService';
@@ -18,8 +21,8 @@ declare var componentHandler: any;
     <div class="signup">
       <h1>Login to ngrx</h1>
 
-      <div *ngIf="auth.error$ | async">
-        <h3>{{auth.error$ | async}}</h3>
+      <div *ngIf="error">
+        <h3>{{error}}</h3>
       </div>
 
       <form (ngSubmit)="onSubmit()" [ngFormModel]="form" #f="ngForm">
@@ -72,6 +75,9 @@ export class Login {
   private form: ControlGroup;
   private subscription: any;
 
+  private error: string;
+  private errorSubscription: Subscription<string>;
+
   constructor(private fb: FormBuilder, private router: Router, private auth: AuthService) {
 
     this.form = fb.group({
@@ -82,6 +88,8 @@ export class Login {
     this.subscription = this.auth.token$.subscribe(token => {
       if (token) { this.router.navigate(['/NgRx']); }
     });
+
+    this.errorSubscription = this.auth.error$.subscribe(error => this.error = error);
   }
 
   ngOnInit() {
@@ -90,7 +98,9 @@ export class Login {
   }
 
   ngOnDestroy() {
+    // don't forget to clean up the subscriptions
     this.subscription.unsubscribe();
+    this.errorSubscription.unsubscribe();
   }
 
   private onSubmit(): boolean {
