@@ -41,22 +41,22 @@ export class AuthService {
     let logins = this.actions$
       .filter(action => action.type === LOGIN_USER)
       .do(() => _store.dispatch({type: LOGIN_IN_PROGRESS}))
-      .mergeMap(
-        action => api.loginUser(action.payload),
-        (action, payload: Auth) => ( payload.token !== null ?
-          {type: USER_AUTHENTICATED, payload} : {type: LOGIN_FAILURE, payload}
-        )
-      );
+      .mergeMap(action => api.loginUser(action.payload)).share();
+
+    let loginSuccess$ = logins.filter((payload: Auth) => payload.token !== null)
+      .map((payload) => ({type: USER_AUTHENTICATED, payload}));
+    let loginFailure$ = logins.filter((payload: Auth) => payload.token === null)
+      .map((payload) => ({type: LOGIN_FAILURE, payload}));
 
     let signups = this.actions$
       .filter(action => action.type === SIGNUP_USER)
       .do(() => _store.dispatch({type: SIGNUP_IN_PROGRESS}))
-      .mergeMap(
-        action => api.signupUser(action.payload),
-        (action, payload: Auth) => ( payload.token !== null ?
-          {type: USER_AUTHENTICATED, payload} : {type: SIGNUP_FAILURE, payload}
-        )
-      );
+      .mergeMap(action => api.signupUser(action.payload)).share();
+
+    let signupSuccess$ = signups.filter((payload: Auth) => payload.token !== null)
+      .map((payload) => ({type: USER_AUTHENTICATED, payload}));
+    let signupFailure$ = signups.filter((payload: Auth) => payload.token === null)
+      .map((payload) => ({type: SIGNUP_FAILURE, payload}));
 
     let logouts = this.actions$
       .filter(action => action.type === LOGOUT_USER)
@@ -64,7 +64,7 @@ export class AuthService {
       .map(() => ({type: LOGOUT_RECEIVED}));
 
     Observable
-      .merge(logins, signups, logouts)
+      .merge(loginSuccess$, loginFailure$, signupSuccess$, signupFailure$, logouts)
       .subscribe((action: Action) => _store.dispatch(action));
   }
 
@@ -80,9 +80,4 @@ export class AuthService {
     this.actions$.next({type: LOGOUT_USER});
   }
 
-  check() {
-    // take(1) will complete the stream and "then" the promise
-    let promise = this.token$.take(1).toPromise();
-    return promise;
-  }
 }
