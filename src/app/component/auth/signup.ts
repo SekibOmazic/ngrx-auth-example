@@ -24,7 +24,7 @@ declare var componentHandler: any;
     <h1>Create an @ngrx account</h1>
 
     <div *ngIf="error">
-      <h3>error</h3>
+      <h3>{{ error }}</h3>
     </div>
 
     <form (ngSubmit)="onSubmit()" [ngFormModel]="form" #f="ngForm">
