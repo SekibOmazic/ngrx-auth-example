@@ -3,6 +3,7 @@ import {
   Inject,
   ViewEncapsulation,
   OnInit,
+  OnDestroy,
   ChangeDetectionStrategy
 } from 'angular2/core';
 
@@ -64,7 +65,7 @@ declare var componentHandler: any;
   return shouldActivate(to, from);
 })
 
-export class NgRx implements OnInit {
+export class NgRx implements OnInit, OnDestroy {
   private tokenSub: Subscription<string>;
 
   private current: User;
